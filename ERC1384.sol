@@ -51,7 +51,7 @@ contract ERC1384Interface {
     function balanceOf(address _owner) public view returns (uint256 _balance);
     function ownerOf(uint256 _FasId) public view returns (address _owner);
     function exists(uint256 _FasId) public view returns (bool);
-    function allOwnedFas(address _owner) public view returns (uint256[] memory _allOwnedFasList);
+    function allOwnedFas(address _owner) public view returns (uint256[] storage _allOwnedFasList);
     function getTransferRecords(uint256 _FasId) public view returns (address[] memory _preOwners);
     function transfer(address _to, uint256[] memory _FasId) public;
     function createVote() public payable returns (uint256 _voteId);
@@ -337,7 +337,7 @@ contract ERC1384BasicContract is ERC1384Interface, Owned {
     * @param _FasId uint256 ID of the Fas
     * @return address of previous owners
     */
-    function getTransferRecords(uint256 _FasId) public view returns (address[] memory) {
+    function getTransferRecords(uint256 _FasId) public view returns (address[] storage) {
         return transferRecords[_FasId];
     }
 
