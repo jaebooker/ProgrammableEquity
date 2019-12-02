@@ -51,7 +51,7 @@ contract ERC1384Interface {
     function balanceOf(address _owner) public view returns (uint256 _balance);
     function ownerOf(uint256 _FasId) public view returns (address _owner);
     function exists(uint256 _FasId) public view returns (bool);
-    function allOwnedFas(address _owner) public view returns (uint256[] storage _allOwnedFasList);
+    function allOwnedFas(address _owner) public view returns (uint256[] memory _allOwnedFasList);
     function getTransferRecords(uint256 _FasId) public view returns (address[] memory _preOwners);
     function transfer(address _to, uint256[] memory _FasId) public;
     function createVote() public payable returns (uint256 _voteId);
@@ -337,7 +337,7 @@ contract ERC1384BasicContract is ERC1384Interface, Owned {
     * @param _FasId uint256 ID of the Fas
     * @return address of previous owners
     */
-    function getTransferRecords(uint256 _FasId) public view returns (address[] storage) {
+    function getTransferRecords(uint256 _FasId) public view returns (address[] memory) {
         return transferRecords[_FasId];
     }
 
@@ -347,7 +347,7 @@ contract ERC1384BasicContract is ERC1384Interface, Owned {
     * @param _to address to receive the ownership of the given Fas ID
     * @param _FasId uint256 ID of the Fas to be transferred
     */
-    function transferForOwnerShip(address _project_owner,address _to, uint256[] memory _FasId) internal{
+    function transferForOwnerShip(address _project_owner,address _to, uint256[] memory _FasId) internal {
         for(uint i = 0; i < _FasId.length; i++)
         {
             require(isOwner(_project_owner, _FasId[i]));
@@ -366,7 +366,7 @@ contract ERC1384BasicContract is ERC1384Interface, Owned {
     * @param _to address to receive the ownership of the given Fas ID
     * @param _FasId uint256 ID of the Fas to be transferred
     */
-    function transfer(address _to, uint256[] memory _FasId) public{
+    function transfer(address _to, uint256[] memory _FasId) public {
         for(uint i = 0; i < _FasId.length; i++)
         {
             require(isOwner(msg.sender, _FasId[i]));
@@ -386,7 +386,7 @@ contract ERC1384BasicContract is ERC1384Interface, Owned {
     * @dev Create a new vote
     * @return the new vote of ID
     */
-    function createVote() public payable returns (uint256){
+    function createVote() public payable returns (uint256) {
         votes_num = votes_num.add(1);
 
         // Vote Agree Number
@@ -408,7 +408,7 @@ contract ERC1384BasicContract is ERC1384Interface, Owned {
     * @param _voteId the given vote ID
     * @param _vote_status_value uint256 the vote of status, 0 Agree, 1 Disagree, 2 Abstain
     */
-    function vote(uint256 _voteId, uint256 _vote_status_value) public{
+    function vote(uint256 _voteId, uint256 _vote_status_value) public {
         require(_vote_status_value >= 0);
         require(_vote_status_value <= 2);
 
@@ -435,7 +435,7 @@ contract ERC1384BasicContract is ERC1384Interface, Owned {
     * @param _voteId the given vote ID
     * @return the voting restult, true success, false failure
     */
-    function getVoteResult(uint256 _voteId) public payable returns (bool){
+    function getVoteResult(uint256 _voteId) public payable returns (bool) {
         require(block.timestamp > (voteResult[_voteId][3] + 1 days));
 
         uint agree_num = voteResult[_voteId][0];
