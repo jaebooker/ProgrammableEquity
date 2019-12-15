@@ -4,7 +4,7 @@ import "ERC721Mintable.sol";
 import "ERC721Burnable.sol";
 
 contract ERC1309VotingToken is ERC721Mintable, ERC721Burnable {
-    function() {
-        
-    }
+
+    
+
 }
