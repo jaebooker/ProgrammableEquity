@@ -38,11 +38,11 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
     }
 
     function _createVotingToken(address author, proposal Proposal) private returns bool {
-        uint tokenCounter = 0;
+        uint256 tokenCounter = 0;
         for(uint i=0; i < _totalAddresses.length; i++) {
             for(uint x=0; x < _balances[_totalAddresses[i]]; x++) {
-                var tokenHash = proposal.hashed + tokenCounter
-                safeMint(address _totalAddresses[i], uint256 tokenHash, bytes memory proposal.hashed);
+                //uint256 tokenHash = hash token
+                safeMint(_totalAddresses[i], tokenHash, proposal.hashed);
                 tokenCounter++;
             }
         }
