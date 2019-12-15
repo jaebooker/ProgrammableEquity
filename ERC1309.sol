@@ -17,8 +17,8 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
 
     function _mint(address account, uint256 value) internal {
         require(totalSupply().add(value) <= _cap, "ERC20Capped: cap exceeded");
-        super._mint(account, value);
         totalAddresses.push(account);
+        super._mint(account, value);
     }
 
     function makeProposal(address author, string title, string description) public returns bool {
