@@ -21,7 +21,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         totalAddresses.push(account);
     }
 
-    function makeProposal(address author, string title, string description) public {
+    function makeProposal(address author, string title, string description) public returns bool {
         require(_balances[author] > 0);
         //TODO: hash proposal
         var proposal = _proposals[proposalHash];
@@ -29,6 +29,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         proposal.title = title;
         proposal.description = description;
         //proposal.hash = hashed proposal title
+        return _createVotingToken(author, proposal);
     }
 
     function getProposal(bytes proposalHash) public returns Proposal {
@@ -36,7 +37,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         return _proposals[proposalHash];
     }
 
-    function _createVotingToken(address author, proposal Proposal) private {
+    function _createVotingToken(address author, proposal Proposal) private returns bool {
         uint tokenCounter = 0;
         for(uint i=0; i < _totalAddresses.length; i++) {
             for(uint x=0; x < _balances[_totalAddresses[i]]; x++) {
@@ -45,6 +46,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
                 tokenCounter++;
             }
         }
+        return true;
     }
 
 }
