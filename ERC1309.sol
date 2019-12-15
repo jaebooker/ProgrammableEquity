@@ -10,6 +10,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         address author;
         string title;
         string description;
+        bytes hashed;
     }
 
     mapping(address => Proposal) private _proposals;
@@ -22,22 +23,25 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
 
     function makeProposal(address author, string title, string description) public {
         require(_balances[author] > 0);
-        var proposal = _proposals[author];
+        //TODO: hash proposal
+        var proposal = _proposals[proposalHash];
         proposal.author = author;
         proposal.title = title;
         proposal.description = description;
+        //proposal.hash = hashed proposal title
     }
 
-    function getProposal(address author) public returns Proposal {
-        require(_proposals[author]);
-        return _proposals[author];
+    function getProposal(bytes proposalHash) public returns Proposal {
+        require(_proposals[proposalHash]);
+        return _proposals[proposalHash];
     }
 
     function _createVotingToken(address author, proposal Proposal) private {
         uint tokenCounter = 0;
         for(uint i=0; i < _totalAddresses.length; i++) {
             for(uint x=0; x < _balances[_totalAddresses[i]]; x++) {
-                safeMint(address _totalAddresses[i], uint256 tokenCounter, bytes memory _data);
+                var tokenHash = proposal.hashed + tokenCounter
+                safeMint(address _totalAddresses[i], uint256 tokenHash, bytes memory proposal.hashed);
                 tokenCounter++;
             }
         }
