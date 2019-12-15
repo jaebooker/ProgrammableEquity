@@ -11,9 +11,10 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         string title;
         string description;
         bytes hashed;
+        uint256 tokens = 0;
     }
 
-    mapping(address => Proposal) private _proposals;
+    mapping(bytes => Proposal) private _proposals;
 
     function _mint(address account, uint256 value) internal {
         require(totalSupply().add(value) <= _cap, "ERC20Capped: cap exceeded");
@@ -37,7 +38,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         return _proposals[proposalHash];
     }
 
-    function _createVotingToken(address author, proposal Proposal) private returns bool {
+    function _createVotingToken(address author, Proposal proposal) private returns bool {
         uint256 tokenCounter = 0;
         for(uint i=0; i < _totalAddresses.length; i++) {
             for(uint x=0; x < _balances[_totalAddresses[i]]; x++) {
@@ -46,7 +47,13 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
                 tokenCounter++;
             }
         }
+        proposal.tokens = tokenCounter;
         return true;
+    }
+
+    function getVoterTally(bytes proposalHash) public view returns bool {
+        var proposal = _proposals[proposalHash];
+        return countVotes(proposal.tokens, proposal.hashed);
     }
 
 }
