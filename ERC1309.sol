@@ -23,12 +23,12 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
 
     function makeProposal(address author, string title, string description) public returns bool {
         require(_balances[author] > 0);
-        //TODO: hash proposal
+        proposalHash = keccak256(title, author);
         var proposal = _proposals[proposalHash];
         proposal.author = author;
         proposal.title = title;
         proposal.description = description;
-        //proposal.hash = hashed proposal title
+        proposal.hash = proposalHash;
         return _createVotingToken(author, proposal);
     }
 
@@ -41,7 +41,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         uint256 tokenCounter = 0;
         for(uint i=0; i < _totalAddresses.length; i++) {
             for(uint x=0; x < _balances[_totalAddresses[i]]; x++) {
-                //uint256 tokenHash = hash token
+                tokenHash = keccak256(tokenCounter, proposal.hashed);
                 safeMint(_totalAddresses[i], tokenHash, proposal.hashed);
                 tokenCounter++;
             }
