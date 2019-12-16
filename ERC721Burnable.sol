@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
-import "Context.sol";
-import "ERC721.sol";
+import "./Context.sol";
+import "./ERC721.sol";
 
 /**
  * @title ERC721 Burnable Token
