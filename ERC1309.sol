@@ -30,6 +30,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         proposal.title = title;
         proposal.description = description;
         proposal.hash = proposalHash;
+        proposal.tokens = 0;
         return _createVotingToken(author, proposal);
     }
 
