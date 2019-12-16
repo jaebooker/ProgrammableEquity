@@ -33,7 +33,7 @@ contract ERC1309 is ERC20Capped, ERC1309VotingToken {
         return _createVotingToken(author, proposal);
     }
 
-    function getProposal(bytes proposalHash) public returns Proposal {
+    function getProposal(bytes proposalHash) public returns (Proposal) {
         require(_proposals[proposalHash]);
         return _proposals[proposalHash];
     }
