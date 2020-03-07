@@ -13,4 +13,8 @@ contract admin {
         _;
     }
 
+    function transferAdminship(address newAdmin) onlyAdmin {
+        admin = newAdmin;
+    }
+
 }
