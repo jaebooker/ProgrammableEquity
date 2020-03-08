@@ -37,8 +37,7 @@ contract Association is admin {
 
     struct Vote {
         bool inSupport;
-        string name;
-        uint memberSince;
+        address voter;
     }
 
     //setup
@@ -93,7 +92,7 @@ contract Association is admin {
         p.voted[msg.sender] = true;
         voteId = p.votes.length;
         p.votes.length++;
-        p.votes[voteId] = Vote({inSupport: supportsProposal, name: msg.sender});
+        p.votes[voteId] = Vote({inSupport: supportsProposal, voter: msg.sender});
         p.numberOfVotes++;
         return voteId;
 
@@ -103,9 +102,28 @@ contract Association is admin {
 
         Proposal p = proposals[proposalId];
 
-        if ((now < votingDeadline) || (p.proposalHash != sha3(p.recipient, p.eitherAmount, p.transitionBytes) || p.numberOfVotes < minimumQuorum) throw;
+        if ((now < votingDeadline) || (p.proposalHash != sha3(p.recipient, p.eitherAmount, p.transitionBytes)) throw;
 
-        if(p.currentResult = majorityMargin) {
+        uint quorum = 0;
+        uint yay = 0;
+        uint nay = 0;
+
+        for(uint i=0; i<p.votes; p++) {
+            Vote v = p.votes[i];
+            uint voteWeight = sharesTokenAddress.balanceOf[v.voter];
+            quorum += voteWeight;
+            if(v.inSupport){
+                yay += voteWeight;
+            }
+            else {
+                nay += voteWeight;
+            }
+        }
+
+        if(quorum <= minimumQuorum) {
+            throw;
+        }
+        else if (yay > nay){
             p.proposalPassed = true;
             if(!p.recipient.call.value(p.eitherAmount * 1 ether)(transitionBytes)){
                 throw;
