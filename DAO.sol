@@ -57,12 +57,27 @@ contract Congress is admin {
     //add member
     function addMember(address targetMember, string memberName) onlyAdmin {
 
-        
+        uint id;
+        if(memberId[targetMember] == 0) {
+            id = members.length;
+            members.length++;
+            memberId[targetMember] = id;
+            members[id] = Member({member: targetMember, memberSince: now, name = memberName});
+        } else {
+            id = memberId[targetMember];
+            Member m = members[id];
+        }
 
     }
 
     function removeMember(address targetMember) onlyAdmin {
-
+        if(memberId[targetMember] ==) throw;
+        // for (uint i = memberId[targetMember]; i < members.length -1; i++) {
+        //     member[i] = members[i+1];
+        // }
+        // delete members[members.length-1];
+        delete members[targetMember];
+        members.length--;
     }
 
     //change rule
