@@ -90,7 +90,32 @@ contract Congress is admin {
     }
 
     //create proposal
-    function newProposal() {
+    function newProposal(address beneficiary, uint eitherAmount, string description, bytes transitionBytes) onlyMember returns (uint proposalId) {
+
+        proposalId = proposals.length;
+        proposals.length++;
+        Proposal p = proposals[proposalId];
+        p.recipient = beneficiary;
+        p.amount = eitherAmount;
+        p.description = description;
+        p.proposalHash = sha3(beneficiary, eitherAmount, transactionByteCode);
 
     }
+
+    function checkProposal() {
+
+    }
+
+    function vote() {
+
+    }
+
+    function executeProposal(uint proposalNumber, bytes transactionByteCode) {
+
+    }
+
+    function () payable {
+
+    }
+
 }
