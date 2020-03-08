@@ -86,20 +86,16 @@ contract Association is admin {
 
     }
 
-    function vote(uint proposalId, bool supportsProposal, string justification) onlyMember returns (uint voteId) {
+    function vote(uint proposalId, bool supportsProposal, string justification) onlyShareholder returns (uint voteId) {
 
         Proposal p = proposals[proposalId];
         if (p.vote[msg.sender]) throw;
         p.voted[msg.sender] = true;
+        voteId = p.votes.length;
+        p.votes.length++;
+        p.votes[voteId] = Vote({inSupport: supportsProposal, name: msg.sender});
         p.numberOfVotes++;
-        if(supportsProposal){
-            p.currentResult++;
-        }
-        else {
-            p.currentResult--;
-        }
-
-        return p.numberOfVotes-1;
+        return voteId;
 
     }
 
