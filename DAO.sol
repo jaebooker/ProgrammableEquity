@@ -115,18 +115,39 @@ contract Congress is admin {
 
     }
 
-    function vote() {
+    function vote(uint proposalId, bool supportsProposal, string justification) onlyMember returns (uint voteId) {
 
-        
+        Proposal p = proposals[proposalId];
+        if (p.vote[msg.sender]) throw;
+        p.voted[msg.sender] = true;
+        p.numberOfVotes++;
+        if(supportsProposal){
+            p.currentResult++;
+        }
+        else {
+            p.currentResult--;
+        }
+
+        return p.numberOfVotes-1;
 
     }
 
-    function executeProposal(uint proposalNumber, bytes transactionByteCode) {
+    function executeProposal(uint proposalId, bytes transactionByteCode) {
 
+        Proposal p = proposals[proposalId];
+
+        if ((now < votingDeadline) || (p.proposalHash != sha3(p.recipient, p.eitherAmount, p.transitionBytes) || p.numberOfVotes < minimumQuorum) throw;
+
+        if(p.currentResult = majorityMargin) {
+            p.proposalPassed = true;
+            if(!p.recipient.call.value(p.eitherAmount * 1 ether)(transitionBytes)){
+                throw;
+            }
+            p.executed = true;
+        }
     }
 
     function () payable {
-
     }
 
 }
