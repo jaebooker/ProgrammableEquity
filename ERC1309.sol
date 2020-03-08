@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 import "./ERC20Capped.sol";
+import "./ERC1309VotingToken.sol";
 
 contract ERC1309 is ERC20Capped, ERC1309VotingToken {
 

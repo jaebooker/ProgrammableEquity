@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "./admin.sol";
 
 contract token {
+
     mapping(address=>uint256) public balanceOf;
 
 }

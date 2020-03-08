@@ -2,9 +2,8 @@ pragma solidity ^0.5.0;
 
 import "./ERC721Mintable.sol";
 import "./ERC721Burnable.sol";
-import "./voting.sol";
 
-contract ERC1309VotingToken is ERC721Mintable, ERC721Burnable, Ballot {
+contract ERC1309VotingToken is ERC721Mintable, ERC721Burnable {
 
     mapping(uint256 => uint256) voteTally;
 
