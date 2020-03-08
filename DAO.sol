@@ -99,14 +99,25 @@ contract Congress is admin {
         p.amount = eitherAmount;
         p.description = description;
         p.proposalHash = sha3(beneficiary, eitherAmount, transactionByteCode);
+        p.votingDeadline = (now + debatingPeriodInMinutes) * 1 Minutes;
+        p.executed = false;
+        p.proposalPassed = false;
+        p.numberOfVotes = 0;
+        numberOfProposals++;
 
+        return proposalId;
     }
 
-    function checkProposal() {
+    function checkProposal(uint proposalId, address beneficiary, uint eitherAmount, bytes transitionBytes) constant returns (bool check) {
+
+        Proposal p = proposals[proposalId];
+        return p.proposalHash == sha3(beneficiary, eitherAmount, transactionByteCode);
 
     }
 
     function vote() {
+
+        
 
     }
 
