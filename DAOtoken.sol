@@ -42,55 +42,26 @@ contract Association is admin {
     }
 
     //setup
-    function Association(address shareAddress, uint minimumSharesToPassVote, uint minimumMinutesForDebate, int maginOfVotes, address congressCreator) payable {
+    function Association(address shareAddress, uint minimumSharesToPassVote, uint minimumMinutesForDebate, address associationCreator) payable {
 
-        changeVotingRules(minimumQuorumForProposal, minimumMinutesForDebate, marginOfVotes);
+        changeVotingRules(shareAddress, minimumMinutesForDebate);
 
-        if(congressCreator == 0) admin = msg.sender;
-        else admin = congressCreator;
+        if(associationCreator == 0) admin = msg.sender;
+        else admin = associationCreator;
 
-        addMember(0,"");
-        addMember(admin,"Admin")
-
-    }
-
-    //add member
-    function addMember(address targetMember, string memberName) onlyAdmin {
-
-        uint id;
-        if(memberId[targetMember] == 0) {
-            id = members.length;
-            members.length++;
-            memberId[targetMember] = id;
-            members[id] = Member({member: targetMember, memberSince: now, name = memberName});
-        } else {
-            id = memberId[targetMember];
-            Member m = members[id];
-        }
-
-    }
-
-    function removeMember(address targetMember) onlyAdmin {
-        if(memberId[targetMember] ==) throw;
-        // for (uint i = memberId[targetMember]; i < members.length -1; i++) {
-        //     member[i] = members[i+1];
-        // }
-        // delete members[members.length-1];
-        delete members[targetMember];
-        members.length--;
     }
 
     //change rule
-    function changeVotingRules(uint minimumQuorumForProposal, uint minimumMinutesForDebate, int maginOfVotes) onlyAdmin {
-
-        minimumQuorum = minimumQuorumForProposal;
+    function changeVotingRules(uint minimumSharesToPassVote, uint minimumMinutesForDebate, token shareAddress) onlyAdmin {
+        shareTokenAddress = token(shareAddress);
+        if(minimumSharesToPassVote == 0) minimumSharesToPassVote = 1;
+        minimumQuorum = minimumSharesToPassVote;
         debatingPeriodInMinutes = minimumMinutesForDebate;
-        majorityMargin = marginOfVotes;
 
     }
 
     //create proposal
-    function newProposal(address beneficiary, uint eitherAmount, string description, bytes transitionBytes) onlyMember returns (uint proposalId) {
+    function newProposal(address beneficiary, uint eitherAmount, string description, bytes transitionBytes) onlyShareholder returns (uint proposalId) {
 
         proposalId = proposals.length;
         proposals.length++;
